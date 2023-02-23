@@ -1,0 +1,92 @@
+<!-- empty cart -->
+<div class="p1" *ngIf="cartitems.length==0">
+<div class="container border border-primary m-5 p-5">
+ <div class="row text-center">
+     <div class="col">
+             <img src="https://www.clickbazar.com/Images/empty-cart.gif" width="200px" alt="">
+         <h3 class="mt-3">Your cart is Empty</h3>
+         <button routerLink="/" class="btn btn-primary mt-2">Shop Now</button>
+        </div>
+    </div>
+</div>
+</div>
+
+
+
+<!-- cart with container -->
+<div class="p4">
+<div class="container" *ngIf="cartitems.length!==0">
+    <div class="row">
+        <div class="col">
+            <table class="table border border-dark m-5">
+                <thead>
+                    <tr>
+                        <th>Number</th>
+                        <th>Name</th>
+                        <th>Image</th>
+                        <th>Description</th>
+                        <th>price</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let product of cartitems let i=index">
+                        <td>{{i+1}}</td>
+                        <td>{{product.title}}</td>
+                        <td><img [src]="product.image" width="100px" alt=""></td>
+                        <td>{{product.description}}</td>
+                        <td>${{product.price}}</td>
+                        <td><i (click)="removeitem(product)"  class="fa fa-trash text-danger"></i></td>
+                    </tr>
+                </tbody>
+            </table>
+            <div style="float: right;" class="mb-4">
+                <button (click)="removeall()" class="btn btn-danger">Empty cart</button> &nbsp;
+                <!-- <button class="btn btn-warning">view more</button> &nbsp; -->
+                <button class="btn btn-success" data-bs-toggle="modal" data-bs-target="#staticBackdrop">check out</button> &nbsp;
+                <b>Grand Total:${{grand}}</b>
+            </div>
+        </div>
+    </div>
+</div>
+</div>
+
+<!-- Modal -->
+<div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header ">
+          <h5 class="modal-title fs-5" id="staticBackdropLabel">check out page</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body ">
+          <h2>Delivery Adress</h2>
+          <form action="" class="form-control p-2 m-2 border border-dark">
+            <input class="form-control" type="text" placeholder="name"> <br>
+            <input  class="form-control" type="text" placeholder="Address/house no"> <br>
+            <input  class="form-control" type="text" placeholder="pincode"> <br>
+            <input  class="form-control" type="text" placeholder="state"> <br>
+            <input  class="form-control" type="text" placeholder="country"> <br>
+            <input  class="form-control" type="text" placeholder="contact number"> <br>
+            <input  class="form-control" type="text" placeholder="E-mail address"> <br>
+          </form>
+        </div>
+        <div [ngSwitch]="grand">
+        
+        <h4>Discount</h4>
+        <img  *ngSwitchCase="5" (click)="discount5per($event.target)"  style="width: 100px;"  src="https://t4.ftcdn.net/jpg/01/11/11/89/360_F_111118906_NYLsqbYXkHTNLWMlllaE1aCyfIg3UVoh.jpg" alt="">
+        <img *ngSwitchCase="10" (click)="discount10per()" style="width: 100px;" src="https://www.shutterstock.com/image-vector/10-off-sale-discount-banner-260nw-697164943.jpg" alt="">
+        <img *ngSwitchCase="30" (click)="discount30per()" style="width: 100px;" src="https://www.shutterstock.com/image-vector/gold-sale-30-percent-golden-260nw-353025554.jpg" alt="">
+        <img *ngSwitchCase="50" (click)="discount50per()" style="width:100px;" src="https://t4.ftcdn.net/jpg/03/92/87/67/360_F_392876767_j9p1erH9MlHPmFTN3YglG51b68q2CCBl.jpg" alt="">
+        <img *ngSwitchDefault="2" (click)="discount2per($event.target)"  style="width:100px;" src="data:image/png;base64,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" alt="">
+      </div>
+      <div>
+        <h6>your grand total is here:{{updatetotal}}</h6>
+      </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+          <button type="button" class="btn btn-primary" (click)="proceed()" >proceed</button>
+        </div>
+      </div>
+    </div>
+  </div>
